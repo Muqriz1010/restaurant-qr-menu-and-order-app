@@ -24,7 +24,7 @@ public class MerchantController : ControllerBase
         _context.Merchants.Add(merchant);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetMerchant), new { id = merchant.Id }, merchant);
+        return CreatedAtAction(nameof(GetMerchant), new { pid = merchant.Id }, merchant);
     }
 
     [HttpGet]

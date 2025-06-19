@@ -7,4 +7,7 @@ public class Merchant
 
     [Required]
     public required string Name { get; set; }
+
+    [Required]
+    public required string UserId { get; set; }
 }
