@@ -64,6 +64,7 @@ public class OrdersController : ControllerBase
         var orders = await _context.Orders
             .Where(o => o.MerchantId == merchantId)
             .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Item)
             .ToListAsync();
 
         var orderDTOs = orders.Select(o => new OrderResponseDTO
@@ -73,12 +74,14 @@ public class OrdersController : ControllerBase
             CreatedAt = o.CreatedAt,
             Status = o.Status,
             TotalPrice = o.TotalPrice,
-            OrderItems = o.OrderItems?.Select(oi => new OrderItemDTO
+            OrderItems = o.OrderItems?.Select(oi => new OrderItemResponseDTO
             {
                 Id = oi.Id,
                 ItemId = oi.ItemId,
-                Quantity = oi.Quantity
-            }).ToList()
+                Quantity = oi.Quantity,
+                ItemName = oi.Item != null ? oi.Item.Name : null,
+                Price = oi.Item != null ? oi.Item.Price : 0 
+            }).ToList() ?? new List<OrderItemResponseDTO>()
         }).ToList();
 
         return Ok(orderDTOs);
